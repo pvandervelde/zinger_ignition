@@ -1,2 +1,21 @@
 # cratebot_ignition
-Contains the Gazebo worlds for Cratebot
+
+This repository contains a number of [Gazebo](http://gazebosim.org/) world definitions that can be used
+for testing the CrateBot in a virtual world. It is assumed
+that you have at least the following ROS packages:
+
+* [cratebot_description](https://github.com/pvandervelde/cratebot_description) - Contains the geometric
+  description of the CrateBot robot for ROS to work with.
+* [cratebot_bringup](https://github.com/pvandervelde/cratebot_bringup) - Contains a launch file that will
+  create all the ROS nodes required for CrateBot to function
+
+## Worlds
+
+The following world files are available in order of complexity.
+
+### Empty World
+
+An empty world with no obstacles. CrateBot will be placed at the origin. Started
+by giving the following command:
+
+    ros2 launch cratebot_ignition ignition_launch rviz:=true world:=empty_world
