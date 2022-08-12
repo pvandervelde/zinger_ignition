@@ -111,8 +111,7 @@ def generate_launch_description():
     # Robot description
     robot_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([robot_description_launch]),
-        launch_arguments=[('model', LaunchConfiguration('model')),
-                          ('use_sim_time', LaunchConfiguration('use_sim_time'))]
+        launch_arguments=[('use_sim_time', LaunchConfiguration('use_sim_time'))]
     )
 
     # Spawn Cratebot
