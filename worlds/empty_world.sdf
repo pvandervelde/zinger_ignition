@@ -49,12 +49,5 @@
                 </visual>
             </link>
         </model>
-        <!-- Spawn cratebot -->
-        <include>
-            <pose>0 0 0 0 0 0</pose>
-            <uri>
-                model://cratebot
-            </uri>
-        </include>
     </world>
 </sdf>
