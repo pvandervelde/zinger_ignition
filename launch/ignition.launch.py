@@ -56,7 +56,15 @@ ARGUMENTS = [
     DeclareLaunchArgument('world', default_value='empty_world',
                           description='Ignition World'),
     DeclareLaunchArgument('robot_name', default_value='cratebot',
-                          description='Robot name')
+                          description='Robot name'),
+    DeclareLaunchArgument('x', default_value='0',
+                          description='The x-coordinate for the robot'),
+    DeclareLaunchArgument('y', default_value='0',
+                          description='The y-coordinate for the robot'),
+    DeclareLaunchArgument('z', default_value='0',
+                          description='The x-coordinate for the robot'),
+    DeclareLaunchArgument('yaw', default_value='0',
+                          description='The rotation for the robot')
 ]
 
 
@@ -91,7 +99,7 @@ def generate_launch_description():
     # Launch configurations
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
-    robot_node_yaml_file = LaunchConfiguration('param_file')
+    # robot_node_yaml_file = LaunchConfiguration('param_file')
 
     # Ignition gazebo
     ignition_gazebo = IncludeLaunchDescription(
