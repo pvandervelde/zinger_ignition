@@ -21,7 +21,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchContext, LaunchDescription, SomeSubstitutionsType, Substitution
 from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, , TimerAction
 from launch.conditions import IfCondition, LaunchConfigurationEquals
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -121,17 +121,25 @@ def generate_launch_description():
     )
 
     # Spawn Cratebot
-    spawn_robot = Node(
-        package='ros_ign_gazebo',
-        executable='create',
-        arguments=[
-            '-name', LaunchConfiguration('robot_name'),
-            '-x', x,
-            '-y', y,
-            '-z', z,
-            '-Y', yaw,
-            '-topic', '/robot_description'],
-        output='screen')
+
+    # Delay launch of robot description to allow Ignition to load first.
+    # Prevents visual bugs in the model.
+    spawn_robot = TimerAction(
+        period=3.0,
+        actions=[
+            Node(
+                package='ros_ign_gazebo',
+                executable='create',
+                arguments=[
+                    '-name', LaunchConfiguration('robot_name'),
+                    '-x', x,
+                    '-y', y,
+                    '-z', z,
+                    '-Y', yaw,
+                    '-topic', '/robot_description'],
+                output='screen')
+            ]
+    )
 
     # ROS Ign bridge
     ros_ign_bridge = IncludeLaunchDescription(
