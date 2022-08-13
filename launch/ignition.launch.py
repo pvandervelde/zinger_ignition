@@ -91,6 +91,9 @@ def generate_launch_description():
     # Paths
     ign_gazebo_launch = PathJoinSubstitution(
         [pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'])
+
+    ign_bridge_launch = PathJoinSubstitution(
+        [pkg_ignition_bringup, 'launch', 'ignition_bridge.launch.py'])
     rviz_launch = PathJoinSubstitution(
         [pkg_robot_viz, 'launch', 'view_robot.launch.py'])
     robot_description_launch = PathJoinSubstitution(
@@ -130,16 +133,23 @@ def generate_launch_description():
             '-topic', 'robot_description'],
         output='screen')
 
+    # ROS Ign bridge
+    ros_ign_bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ign_bridge_launch])
+    )
+
     # Rviz2
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
         condition=IfCondition(LaunchConfiguration('rviz')),
+        launch_arguments=[('use_sim_time', LaunchConfiguration('use_sim_time'))]
     )
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(ign_resource_path)
     ld.add_action(ignition_gazebo)
+    ld.add_action(ros_ign_bridge)
     ld.add_action(rviz2)
     ld.add_action(robot_description)
     ld.add_action(spawn_robot)
