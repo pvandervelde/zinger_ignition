@@ -130,7 +130,7 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw,
-            '-topic', 'robot_description'],
+            '-topic', '/robot_description'],
         output='screen')
 
     # ROS Ign bridge
