@@ -20,7 +20,8 @@ from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchContext, LaunchDescription, SomeSubstitutionsType, Substitution
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, TimerAction
 from launch.conditions import IfCondition, LaunchConfigurationEquals
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -50,9 +51,6 @@ ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='false',
                           choices=['true', 'false'],
                           description='Start rviz.'),
-    DeclareLaunchArgument('use_sim_time', default_value='true',
-                          choices=['true', 'false'],
-                          description='use_sim_time'),
     DeclareLaunchArgument('world', default_value='empty_world',
                           description='Ignition World'),
     DeclareLaunchArgument('robot_name', default_value='cratebot',
@@ -109,6 +107,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
             ('ign_args', [
+                '-r',
                 LaunchConfiguration('world'), '.sdf',
                 ' -v 4'])
         ]
@@ -117,28 +116,14 @@ def generate_launch_description():
     # Robot description
     robot_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([robot_description_launch]),
-        launch_arguments=[('use_sim_time', LaunchConfiguration('use_sim_time'))]
+        launch_arguments=[('use_sim_time', 'true')]
     )
 
-    # Spawn Cratebot
-
-    # Delay launch of robot description to allow Ignition to load first.
-    # Prevents visual bugs in the model.
-    spawn_robot = TimerAction(
-        period=3.0,
-        actions=[
-            Node(
-                package='ros_ign_gazebo',
-                executable='create',
-                arguments=[
-                    '-name', LaunchConfiguration('robot_name'),
-                    '-x', x,
-                    '-y', y,
-                    '-z', z,
-                    '-Y', yaw,
-                    '-topic', '/robot_description'],
-                output='screen')
-            ]
+    delay_robot_description_after_ignition = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=ignition_gazebo,
+            on_exit=[robot_description],
+        )
     )
 
     # ROS Ign bridge
@@ -146,19 +131,58 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([ign_bridge_launch])
     )
 
+    delay_bridge_after_robot_description = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=robot_description,
+            on_exit=[ros_ign_bridge],
+        )
+    )
+
+    # Spawn the robot in Gazebo
+    spawn_robot = Node(
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=[
+            '-name', LaunchConfiguration('robot_name'),
+            '-x', x,
+            '-y', y,
+            '-z', z,
+            '-Y', yaw,
+            '-topic', '/robot_description'], # <-- There might not be a topic with this ....
+        output='screen')
+
+    delay_robot_spawn_after_bridge = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=ros_ign_bridge,
+            on_exit=[spawn_robot],
+        )
+    )
+
     # Rviz2
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
         condition=IfCondition(LaunchConfiguration('rviz')),
-        launch_arguments=[('use_sim_time', LaunchConfiguration('use_sim_time'))]
+        launch_arguments=[('use_sim_time', 'true')]
+    )
+
+    delay_rviz_after_robot_description = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=robot_description,
+            on_exit=[rviz2],
+        )
     )
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
+
+    # Set the environment variables for Ignition
     ld.add_action(ign_resource_path)
+
     ld.add_action(ignition_gazebo)
-    ld.add_action(ros_ign_bridge)
-    ld.add_action(rviz2)
-    ld.add_action(robot_description)
-    ld.add_action(spawn_robot)
+    ld.add_action(delay_robot_description_after_ignition)
+    ld.add_action(delay_bridge_after_robot_description)
+
+
+    ld.add_action(delay_robot_spawn_after_bridge)
+    ld.add_action(delay_rviz_after_robot_description)
     return ld
