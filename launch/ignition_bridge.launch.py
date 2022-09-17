@@ -30,6 +30,16 @@ def generate_launch_description():
                         ],
                         condition=IfCondition(use_sim_time))
 
+    # robot_description bridge
+    robot_description_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+                        namespace=namespace,
+                        name='robot_description_bridge',
+                        output='screen',
+                        arguments=[
+                            '/robot_description' + '@std_msgs/msg/String' + '@ignition::msgs::StringMsg'
+                        ],
+                        condition=IfCondition(use_sim_time))
+
     # cmd_vel bridge
     cmd_vel_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
                           name='cmd_vel_bridge',
@@ -38,7 +48,7 @@ def generate_launch_description():
                               'use_sim_time': use_sim_time
                           }],
                           arguments=[
-                              '/cmd_vel' + '@geometry_msgs/msg/Twist' + '[ignition.msgs.Twist',
+                              '/cmd_vel' + '@geometry_msgs/msg/Twist' + '@ignition.msgs.Twist',
                               ['/model/', LaunchConfiguration('robot_name'), '/cmd_vel' +
                                '@geometry_msgs/msg/Twist' +
                                ']ignition.msgs.Twist']
@@ -91,6 +101,7 @@ def generate_launch_description():
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(clock_bridge)
+    ld.add_action(robot_description_bridge)
     ld.add_action(cmd_vel_bridge)
     ld.add_action(pose_bridge)
     ld.add_action(odom_base_tf_bridge)
