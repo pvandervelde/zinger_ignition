@@ -94,8 +94,10 @@ def generate_launch_description():
         [pkg_ignition_bringup, 'launch', 'ignition_bridge.launch.py'])
     rviz_launch = PathJoinSubstitution(
         [pkg_robot_viz, 'launch', 'view_robot.launch.py'])
-    robot_description_launch = PathJoinSubstitution(
-        [pkg_robot_description, 'launch', 'robot_description.launch.py'])
+    robot_description_base_launch = PathJoinSubstitution(
+        [pkg_robot_description, 'launch', 'base.launch.py'])
+    robot_description_controller_launch = PathJoinSubstitution(
+        [pkg_robot_description, 'launch', 'controllers.launch.py'])
 
     # Launch configurations
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
@@ -107,35 +109,21 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
             ('ign_args', [
-                '-r',
+                '-r ',
                 LaunchConfiguration('world'), '.sdf',
                 ' -v 4'])
         ]
     )
 
     # Robot description
-    robot_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([robot_description_launch]),
+    robot_description_base = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([robot_description_base_launch]),
         launch_arguments=[('use_sim_time', 'true')]
-    )
-
-    delay_robot_description_after_ignition = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=ignition_gazebo,
-            on_exit=[robot_description],
-        )
     )
 
     # ROS Ign bridge
     ros_ign_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_bridge_launch])
-    )
-
-    delay_bridge_after_robot_description = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_description,
-            on_exit=[ros_ign_bridge],
-        )
     )
 
     # Spawn the robot in Gazebo
@@ -151,13 +139,6 @@ def generate_launch_description():
             '-topic', '/robot_description'], # <-- There might not be a topic with this ....
         output='screen')
 
-    delay_robot_spawn_after_bridge = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=ros_ign_bridge,
-            on_exit=[spawn_robot],
-        )
-    )
-
     # Rviz2
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
@@ -165,11 +146,17 @@ def generate_launch_description():
         launch_arguments=[('use_sim_time', 'true')]
     )
 
-    delay_rviz_after_robot_description = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=robot_description,
-            on_exit=[rviz2],
-        )
+    # Delay launch of the controllers until after Ignition has launched and the model
+    # has spawned in Ignition because the Ignition controller plugins don't become available
+    # until the model has spawned
+    robot_controllers = TimerAction(
+        period=3.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([robot_description_controller_launch]),
+                launch_arguments=[('model', LaunchConfiguration('model'))],
+                condition=IfCondition(LaunchConfiguration('description'))
+            )]
     )
 
     # Define LaunchDescription variable
@@ -178,11 +165,20 @@ def generate_launch_description():
     # Set the environment variables for Ignition
     ld.add_action(ign_resource_path)
 
+    # Launch Ignition
     ld.add_action(ignition_gazebo)
-    ld.add_action(delay_robot_description_after_ignition)
-    ld.add_action(delay_bridge_after_robot_description)
 
+    # Launch the robot state publisher
+    ld.add_action(robot_description_base)
 
-    ld.add_action(delay_robot_spawn_after_bridge)
-    ld.add_action(delay_rviz_after_robot_description)
+    # Start the bridge between Ignition and ROS
+    ld.add_action(ros_ign_bridge)
+
+    # Spawn the model in Ignition. This should load all the controllers
+    ld.add_action(spawn_robot)
+
+    # Launch the controllers
+    ld.add_action(robot_controllers)
+
+    ld.add_action(rviz2)
     return ld
