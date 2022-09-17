@@ -143,7 +143,10 @@ def generate_launch_description():
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
         condition=IfCondition(LaunchConfiguration('rviz')),
-        launch_arguments=[('use_sim_time', 'true')]
+        launch_arguments=[
+            ('use_sim_time', 'true'),
+            ('description', 'false')
+        ]
     )
 
     # Delay launch of the controllers until after Ignition has launched and the model
