@@ -157,8 +157,7 @@ def generate_launch_description():
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([robot_description_controller_launch]),
-                launch_arguments=[('model', LaunchConfiguration('model'))],
-                condition=IfCondition(LaunchConfiguration('description'))
+                launch_arguments=[('model', LaunchConfiguration('model'))]
             )]
     )
 
