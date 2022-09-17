@@ -157,7 +157,11 @@ def generate_launch_description():
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([robot_description_controller_launch]),
-                launch_arguments=[('model', LaunchConfiguration('model'))]
+                launch_arguments=[
+                    ('use_sim_time', 'true'),
+                    ('use_fake_hardware', 'false'),
+                    ('fake_sensor_commands', 'false'),
+                ]
             )]
     )
 
