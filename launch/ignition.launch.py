@@ -153,7 +153,7 @@ def generate_launch_description():
     # has spawned in Ignition because the Ignition controller plugins don't become available
     # until the model has spawned
     robot_controllers = TimerAction(
-        period=5.0,
+        period=10.0,
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([robot_description_controller_launch]),
