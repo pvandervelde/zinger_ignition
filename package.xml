@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>cratebot_ignition</name>
+  <version>0.1.1</version>
+  <description>CrateBot Ignition Simulator</description>
+  <maintainer email="pvandervelde@example.com">pvandervelde</maintainer>
+  <license>Apache 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Cratebot -->
+  <depend>cratebot_description</depend>
+  <depend>cratebot_viz</depend>
+
+  <!-- ROS IGN -->
+  <depend>ros_ign_interfaces</depend>
+  <depend>ros_ign_gazebo</depend>
+  <depend>ros_ign_bridge</depend>
+
+  <!-- Messages -->
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
