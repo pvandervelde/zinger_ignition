@@ -53,7 +53,7 @@ ARGUMENTS = [
                           description='Start rviz.'),
     DeclareLaunchArgument('world', default_value='empty_world',
                           description='Ignition World'),
-    DeclareLaunchArgument('robot_name', default_value='cratebot',
+    DeclareLaunchArgument('robot_name', default_value='tblaze',
                           description='Robot name'),
     DeclareLaunchArgument('x', default_value='0',
                           description='The x-coordinate for the robot'),
@@ -70,11 +70,11 @@ def generate_launch_description():
 
     # Directories
     pkg_ignition_bringup = get_package_share_directory(
-        'cratebot_ignition')
+        'tblaze_ignition')
     pkg_robot_description = get_package_share_directory(
-        'cratebot_description')
+        'tblaze_description')
     pkg_robot_viz = get_package_share_directory(
-        'cratebot_viz')
+        'tblaze_viz')
 
     pkg_ros_ign_gazebo = get_package_share_directory(
         'ros_ign_gazebo')
