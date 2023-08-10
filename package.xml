@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>tblaze_ignition</name>
+  <name>zinger_ignition</name>
   <version>0.1.1</version>
-  <description>TBlaze Ignition Simulator</description>
+  <description>Zinger Ignition Simulator</description>
   <maintainer email="pvandervelde@example.com">pvandervelde</maintainer>
   <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <!-- TBlaze -->
-  <depend>tblaze_description</depend>
-  <depend>tblaze_viz</depend>
+  <!-- Zinger -->
+  <depend>zinger_description</depend>
+  <depend>zinger_viz</depend>
 
   <!-- ROS IGN -->
   <depend>ros_ign_interfaces</depend>
