@@ -73,6 +73,9 @@ def generate_launch_description():
         'zinger_ignition')
     pkg_robot_description = get_package_share_directory(
         'zinger_description')
+    pkg_robot_control = get_package_share_directory(
+        'zinger_swerve_controller'
+    )
     pkg_robot_viz = get_package_share_directory(
         'zinger_viz')
 
@@ -98,6 +101,8 @@ def generate_launch_description():
         [pkg_robot_description, 'launch', 'base.launch.py'])
     robot_description_controller_launch = PathJoinSubstitution(
         [pkg_robot_description, 'launch', 'controllers.launch.py'])
+    robot_control_launch = PathJoinSubstitution(
+        [pkg_robot_control, 'launch', 'swerve_controller.launch.py'])
 
     # Launch configurations
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
@@ -165,6 +170,20 @@ def generate_launch_description():
             )]
     )
 
+    # Delay launch of the swerve controller until after the ROS2 controllers have launched
+    robot_swerve_control = TimerAction(
+        period=11.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([robot_control_launch]),
+                launch_arguments=[
+                    ('use_sim_time', 'true'),
+                    ('use_fake_hardware', 'false'),
+                    ('fake_sensor_commands', 'false'),
+                ]
+            )]
+    )
+
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
 
@@ -185,6 +204,9 @@ def generate_launch_description():
 
     # Launch the controllers
     ld.add_action(robot_controllers)
+
+    # launch the swerve controller
+    ld.add_action(robot_swerve_control)
 
     ld.add_action(rviz2)
     return ld
