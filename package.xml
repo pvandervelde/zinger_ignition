@@ -11,6 +11,7 @@
 
   <!-- Zinger -->
   <depend>zinger_description</depend>
+  <depend>zinger_swerve_controller</depend>
   <depend>zinger_viz</depend>
 
   <!-- ROS IGN -->
