@@ -59,11 +59,16 @@ def generate_launch_description():
                        arguments=[
                            ['/model/', LaunchConfiguration('robot_name'), '/pose' +
                             '@tf2_msgs/msg/TFMessage' +
-                            '[ignition.msgs.Pose_V']
+                            '[ignition.msgs.Pose_V'],
+                           ['/model/', LaunchConfiguration('robot_name'), '/pose_static' +
+                            '@tf2_msgs/msg/TFMessage' +
+                            '[ignition.msgs.Pose_V'],
                        ],
                        remappings=[
                            (['/model/', LaunchConfiguration('robot_name'), '/pose'],
-                            'sim_ground_truth_pose')
+                            'sim_ground_truth_pose'),
+                           (['/model/', LaunchConfiguration('robot_name'), '/pose_static'],
+                            'sim_ground_truth_pose_static')
                        ])
 
     # tf bridge
