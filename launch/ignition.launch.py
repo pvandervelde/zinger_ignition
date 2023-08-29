@@ -206,7 +206,7 @@ def generate_launch_description():
     ld.add_action(robot_controllers)
 
     # launch the swerve controller
-    ld.add_action(robot_swerve_control)
+    #ld.add_action(robot_swerve_control)
 
     ld.add_action(rviz2)
     return ld
