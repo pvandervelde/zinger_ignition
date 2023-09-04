@@ -6,8 +6,8 @@
                 The maximum step size the simulation can take.
                 Aiming for a minimum of 250 Hz
             -->
-            <max_step_size>0.004</max_step_size>
-            <real_time_factor>2.0</real_time_factor>
+            <max_step_size>0.002</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
             <real_time_update_rate>500</real_time_update_rate>
         </physics>
         <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics"></plugin>
