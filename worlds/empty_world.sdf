@@ -7,13 +7,8 @@
                 Aiming for a minimum of 250 Hz
             -->
             <max_step_size>0.004</max_step_size>
-            <!--
-                Ignore the other settings for now. We want the simulation to run as fast as it can.
-            -->
-            <!--
-            <real_time_factor>1.0</real_time_factor>
+            <real_time_factor>2.0</real_time_factor>
             <real_time_update_rate>500</real_time_update_rate>
-            -->
         </physics>
         <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics"></plugin>
         <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands"></plugin>
