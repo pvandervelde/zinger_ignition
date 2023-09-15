@@ -158,24 +158,10 @@ def generate_launch_description():
     # has spawned in Ignition because the Ignition controller plugins don't become available
     # until the model has spawned
     robot_controllers = TimerAction(
-        period=10.0,
+        period=15.0,
         actions=[
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([robot_description_controller_launch]),
-                launch_arguments=[
-                    ('use_sim_time', 'true'),
-                    ('use_fake_hardware', 'false'),
-                    ('fake_sensor_commands', 'false'),
-                ]
-            )]
-    )
-
-    # Delay launch of the swerve controller until after the ROS2 controllers have launched
-    robot_swerve_control = TimerAction(
-        period=11.0,
-        actions=[
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([robot_control_launch]),
                 launch_arguments=[
                     ('use_sim_time', 'true'),
                     ('use_fake_hardware', 'false'),
