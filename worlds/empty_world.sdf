@@ -2,15 +2,20 @@
 <sdf version="1.8">
     <world name="default">
         <physics name="1ms" type="ignored">
-            <max_step_size>0.001</max_step_size>
+            <!--
+                The maximum step size the simulation can take.
+                Aiming for a minimum of 250 Hz
+            -->
+            <max_step_size>0.002</max_step_size>
             <real_time_factor>1.0</real_time_factor>
+            <real_time_update_rate>500</real_time_update_rate>
         </physics>
         <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics"></plugin>
         <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands"></plugin>
         <plugin filename="ignition-gazebo-scene-broadcaster-system" name="ignition::gazebo::systems::SceneBroadcaster"></plugin>
         <plugin filename="ignition-gazebo-contact-system" name="ignition::gazebo::systems::Contact"></plugin>
         <light type="directional" name="sun">
-            <cast_shadows>true</cast_shadows>
+            <cast_shadows>false</cast_shadows>
             <pose>0 0 10 0 0 0</pose>
             <diffuse>0.8 0.8 0.8 1</diffuse>
             <specular>0.2 0.2 0.2 1</specular>
