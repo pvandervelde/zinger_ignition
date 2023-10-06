@@ -88,10 +88,33 @@ def generate_launch_description():
                                    (['/model/', LaunchConfiguration('robot_name'), '/tf'], '/tf')
                                ])
 
+    # Lidar bridge
+    lidar_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='lidar_bridge',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time
+        }],
+        arguments=[
+            ['/world/', LaunchConfiguration('world'),
+             '/model/', LaunchConfiguration('robot_name'),
+             '/link/rplidar_link/sensor/rplidar/scan' +
+             '@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
+        ],
+        remappings=[
+            (['/world/', LaunchConfiguration('world'),
+              '/model/', LaunchConfiguration('robot_name'),
+              '/link/rplidar_link/sensor/rplidar/scan'],
+             'scan')
+        ])
+
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(clock_bridge)
     ld.add_action(cmd_vel_bridge)
     ld.add_action(pose_bridge)
     ld.add_action(odom_base_tf_bridge)
+    ld.add_action(lidar_bridge)
     return ld
