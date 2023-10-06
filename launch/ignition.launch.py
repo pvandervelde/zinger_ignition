@@ -120,6 +120,20 @@ def generate_launch_description():
         ]
     )
 
+    ignition_gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([ign_gazebo_launch]),
+        launch_arguments=[
+            ('ign_args', [LaunchConfiguration('world'),
+                          '.sdf',
+                          ' -v 4',
+                          ' --gui-config ',
+                          PathJoinSubstitution(
+                            [pkg_ignition_bringup,
+                             'gui',
+                             'gui.config'])])
+        ]
+    )
+
     # Robot description
     robot_description_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([robot_description_base_launch]),
