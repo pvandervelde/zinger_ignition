@@ -113,16 +113,6 @@ def generate_launch_description():
     ignition_gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
-            ('ign_args', [
-                '-r ',
-                LaunchConfiguration('world'), '.sdf',
-                ' -v 4'])
-        ]
-    )
-
-    ignition_gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ign_gazebo_launch]),
-        launch_arguments=[
             ('ign_args', [LaunchConfiguration('world'),
                           '.sdf',
                           ' -v 4',
