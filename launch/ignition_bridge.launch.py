@@ -21,7 +21,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     # clock bridge
-    clock_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+    clock_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                         namespace=namespace,
                         name='clock_bridge',
                         output='screen',
@@ -31,7 +31,7 @@ def generate_launch_description():
                         condition=IfCondition(use_sim_time))
 
     # cmd_vel bridge
-    cmd_vel_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+    cmd_vel_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                           name='cmd_vel_bridge',
                           output='screen',
                           parameters=[{
@@ -49,7 +49,7 @@ def generate_launch_description():
                           ])
 
     # Pose bridge
-    pose_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+    pose_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                        namespace=namespace,
                        name='pose_bridge',
                        output='screen',
@@ -72,7 +72,7 @@ def generate_launch_description():
                        ])
 
     # tf bridge
-    odom_base_tf_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+    odom_base_tf_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
                                namespace=namespace,
                                name='odom_base_tf_bridge',
                                output='screen',
@@ -89,7 +89,7 @@ def generate_launch_description():
                                ])
 
     # Lidar bridge
-    lidar_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+    lidar_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge',
         namespace=namespace,
         name='lidar_bridge',
         output='screen',
