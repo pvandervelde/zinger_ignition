@@ -110,6 +110,8 @@ def generate_launch_description():
              'scan')
         ])
 
+    # IMU bridge
+
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(clock_bridge)
