@@ -89,9 +89,8 @@ def generate_launch_description():
                                ])
 
     # Lidar bridge
-    lidar_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
+    lidar_bridge = Node(package='ros_ign_bridge', executable='parameter_bridge',
+        namespace=namespace,
         name='lidar_bridge',
         output='screen',
         parameters=[{
