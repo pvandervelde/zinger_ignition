@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sdf version="1.8">
-    <world name="default">
+    <world name="empty_world">
         <physics name="1ms" type="ignored">
             <!--
                 The maximum step size the simulation can take.
