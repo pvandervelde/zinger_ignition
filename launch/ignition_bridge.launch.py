@@ -120,6 +120,23 @@ def generate_launch_description():
         ])
 
     # IMU bridge
+    imu_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        namespace=namespace,
+        name="imu_bridge",
+        output="screen",
+        parameters=[{
+            "use_sim_time": use_sim_time
+        }],
+        arguments=[
+            ["/model/", LaunchConfiguration("robot_name"),
+             "/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU"]
+        ],
+        remappings=[
+            (["/model/", LaunchConfiguration("robot_name"), "/imu"],
+                "imu")
+        ])
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
@@ -128,4 +145,5 @@ def generate_launch_description():
     ld.add_action(pose_bridge)
     ld.add_action(odom_base_tf_bridge)
     ld.add_action(lidar_bridge)
+    ld.add_action(imu_bridge)
     return ld
