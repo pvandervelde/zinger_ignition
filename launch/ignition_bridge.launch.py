@@ -109,13 +109,13 @@ def generate_launch_description():
         arguments=[
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/rplidar_front/scan' +
+             '/link/base_footprint/sensor/rplidar_front/scan' +
              '@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
         ],
         remappings=[
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
-              '/rplidar_front/scan'],
+              '/link/base_footprint/sensor/rplidar_front/scan'],
              'scan')
         ])
 
@@ -130,18 +130,22 @@ def generate_launch_description():
             "use_sim_time": use_sim_time
         }],
         arguments=[
-            ["/model/", LaunchConfiguration("robot_name"),
-             "/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU"]
+            ['/world/', LaunchConfiguration('world'),
+             '/model/', LaunchConfiguration('robot_name'),
+             '/link/base_footprint/sensor/imu_center/imu' +
+             "@sensor_msgs/msg/Imu[ignition.msgs.IMU"]
         ],
         remappings=[
-            (["/model/", LaunchConfiguration("robot_name"), "/imu"],
-                "imu")
+            (['/world/', LaunchConfiguration('world'),
+             '/model/', LaunchConfiguration('robot_name'),
+             '/link/base_footprint/sensor/imu_center/imu'],
+              "imu")
         ])
 
     # Create launch description and add actions
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(clock_bridge)
-    ld.add_action(cmd_vel_bridge)
+    #ld.add_action(cmd_vel_bridge)
     ld.add_action(pose_bridge)
     ld.add_action(odom_base_tf_bridge)
     ld.add_action(lidar_bridge)
