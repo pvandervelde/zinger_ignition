@@ -107,16 +107,10 @@ def generate_launch_description():
             'use_sim_time': use_sim_time
         }],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
-             '/link/base_footprint/sensor/rplidar_front/scan' +
-             '@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
+            ['/rplidar_front/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
         ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
-              '/link/base_footprint/sensor/rplidar_front/scan'],
-             'scan')
+            (['/rplidar_front/scan'], 'scan')
         ])
 
     # IMU bridge
@@ -132,13 +126,13 @@ def generate_launch_description():
         arguments=[
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/base_footprint/sensor/imu_center/imu' +
+             '/link/link_sensor_imu_imu_center/sensor/imu_center/imu' +
              "@sensor_msgs/msg/Imu[ignition.msgs.IMU"]
         ],
         remappings=[
             (['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/base_footprint/sensor/imu_center/imu'],
+             '/link/link_sensor_imu_imu_center/sensor/imu_center/imu'],
               "imu")
         ])
 
