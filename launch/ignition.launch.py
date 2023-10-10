@@ -194,7 +194,7 @@ def generate_launch_description():
     ld.add_action(spawn_robot)
 
     # Launch the controllers
-    #ld.add_action(robot_controllers)
+    ld.add_action(robot_controllers)
 
     # launch the swerve controller
     #ld.add_action(robot_swerve_control)
