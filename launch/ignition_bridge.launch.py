@@ -110,7 +110,7 @@ def generate_launch_description():
             ['/rplidar_front/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
         ],
         remappings=[
-            (['/rplidar_front/scan'], 'scan')
+            (['/rplidar_front/scan'], '/scan')
         ])
 
     # IMU bridge
@@ -133,7 +133,7 @@ def generate_launch_description():
             (['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
              '/link/link_sensor_imu_imu_center/sensor/imu_center/imu'],
-              "imu")
+              "/imu")
         ])
 
     # Create launch description and add actions
