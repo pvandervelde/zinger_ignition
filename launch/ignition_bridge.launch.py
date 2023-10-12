@@ -107,10 +107,13 @@ def generate_launch_description():
             'use_sim_time': use_sim_time
         }],
         arguments=[
-            ['/rplidar_front/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
+            '/rplidar_front/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+            '/rplidar_front/scan/points@sensor_msgs/msg/PointCloud2' +'[ignition.msgs.PointCloudPacked'
         ],
         remappings=[
-            (['/rplidar_front/scan'], '/scan')
+            ('/rplidar_front/scan', '/scan'),
+            ('rplidar_front/scan/points', '/scan/points')
+            ('/zinger/link_sensor_lidar_rplidar_front/rplidar_front', 'link_sensor_lidar_rplidar_front')
         ])
 
     # IMU bridge
