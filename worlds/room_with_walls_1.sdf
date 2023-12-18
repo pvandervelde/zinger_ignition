@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sdf version="1.8">
-    <world name="empty_world">
+    <world name="room_with_walls_1">
         <physics name="1ms" type="ignored">
             <!--
                 The maximum step size the simulation can take.
@@ -54,5 +54,11 @@
                 </visual>
             </link>
         </model>
+
+        <!-- The room model -->
+        <include>
+            <uri>model://room_with_walls_1</uri>
+            <pose>-2.0 2 0 0 0 0</pose>
+        </include>
     </world>
 </sdf>

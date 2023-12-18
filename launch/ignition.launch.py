@@ -87,6 +87,7 @@ def generate_launch_description():
         name='IGN_GAZEBO_RESOURCE_PATH',
         value=[
             os.path.join(pkg_ignition_bringup, 'worlds'), ':' +
+            os.path.join(pkg_ignition_bringup, 'models'), ':' +
             str(Path(pkg_robot_description).parent.resolve())])
 
     # Paths
@@ -113,10 +114,14 @@ def generate_launch_description():
     ignition_gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
-            ('ign_args', [
-                '-r ',
-                LaunchConfiguration('world'), '.sdf',
-                ' -v 4'])
+            ('ign_args', [LaunchConfiguration('world'),
+                          '.sdf',
+                          ' -v 4',
+                          ' --gui-config ',
+                          PathJoinSubstitution(
+                            [pkg_ignition_bringup,
+                             'gui',
+                             'gui.config'])])
         ]
     )
 

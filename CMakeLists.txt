@@ -11,7 +11,7 @@ find_package(ament_cmake REQUIRED)
 find_package(ros_ign_interfaces REQUIRED)
 
 install(
-  DIRECTORY launch worlds
+  DIRECTORY config gui launch models worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
