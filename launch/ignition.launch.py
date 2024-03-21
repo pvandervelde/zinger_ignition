@@ -60,7 +60,7 @@ ARGUMENTS = [
     DeclareLaunchArgument('y', default_value='0',
                           description='The y-coordinate for the robot'),
     DeclareLaunchArgument('z', default_value='0',
-                          description='The x-coordinate for the robot'),
+                          description='The z-coordinate for the robot'),
     DeclareLaunchArgument('yaw', default_value='0',
                           description='The rotation for the robot')
 ]
