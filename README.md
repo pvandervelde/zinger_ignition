@@ -18,4 +18,4 @@ The following world files are available in order of complexity.
 An empty world with no obstacles. Zinger will be placed at the origin. Started
 by giving the following command:
 
-    ros2 launch zinger_ignition ignition_launch rviz:=true world:=empty_world
+    ros2 launch zinger_ignition ignition.launch.py rviz:=true world:=empty_world
